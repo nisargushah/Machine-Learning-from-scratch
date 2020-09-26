@@ -84,9 +84,9 @@ However due to various different hyperparameters, each implementation is differe
 This dataset is part of [UCI dataset](https://archive.ics.uci.edu/ml/datasets.php). This is an amzing dataset library maintained by 
 [University of California at Irvine](https://uci.edu/). It is motly, according to my knowledge, public source. So anyone is free to clone the datasets. 
 
-The Data set we are using is not a big dataset with just 7494 training objects and 3498 test objects with classification to be done on 10 classes.
+The Data set we are using is not a big dataset with just 1000 training objects and 3498 test objects with classification to be done on 10 classes.
 
-Each row constitues as an object with its columns as feautes ( 16 in total ) with the last one being the class of its object or example. 
+Each row constitues as an object with its columns as feautes ( 9 in total ) with the last one being the class of its object or example. 
 
 Both the training file and the test file are text files, containing data in tabular format. Each value is a number, and values are separated by white space. 
 The i-th row and j-th column contain the value for the j-th dimension of the i-th object. The only exception is the LAST column, that stores the class label 
