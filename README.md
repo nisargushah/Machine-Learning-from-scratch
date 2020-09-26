@@ -14,7 +14,7 @@ Machine Learning Algorithms for my [CSE 4309 - Fundamentals of Machine Learning]
   * [About Dataset](#about-dataset)
   * [Naive Bayes](#naive-bayes)
     * [How does Naive Bayes work ? ](#how-does-naive-bayes-work)
-    * [How to run naive Bayes program](#how-to-run-the-program)
+    * [How to run the program](#how-to-run-the-program)
 
 ## Setting up the environment
 
