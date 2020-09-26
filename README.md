@@ -7,7 +7,6 @@ Machine Learning Algorithms for my [CSE 4309 - Fundamentals of Machine Learning]
 
 * [Setting up the environment](#setting-up-the-environment)
   * [Setting up Anaconda](#setting-up-anaconda)
-  * [For Winndows Users](#for-windows-user)
 * [Cloning the repository](#cloning-the-repository)
 * [Installing Dependencies](#installing-dependencies)
 * [Running the program](#running-the-program)
@@ -93,9 +92,10 @@ You can finnd the dataset there as well. I have some illustrative examples if th
 
 
 ### Naive Bayes
+ ...to be updated
 
 #### How does Naive Bayes theorem work ? 
-
+ ... to be updated
 
 
 #### How to run the program
