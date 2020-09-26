@@ -99,3 +99,11 @@ You can finnd the dataset there as well. I have some illustrative examples if th
 
 
 #### How to run the program
+
+We can run the code using : 
+```console
+foo@bar:~$ python3 naive_bayes.py dataset/train.txt dataset/test.txt
+```
+or
+```console
+foo@bar:~$ python naive_bayes.py dataset/train.txt dataset/test.txt
