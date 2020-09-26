@@ -71,5 +71,109 @@ We will see how to implement it in the code section:
 
 ## Code Explaination
 
+The first step we do is to import all the essential libraries: 
+
+```python
+
+import sys
+import math
+import numpy as np
+from statistics import stdev as stdev
+```
+So lets create out function naive_bayes. We will take the location of train file and test file as an argument so that we can read the files.
+
+```python
+def naive_bayes(train_file, test_file):
+    try:
+        import pandas as pd
+        train_data = pd.read_csv(train_file, header = None)
+        test_data = pd.read_csv(test_file, header=None)
+        X_test  = train_data.iloc[:,:-1]
+        X_test = X_test.astype(np.float)
+        y_test  = train_data.iloc[:,-1]
+        y_test = y_test.astype(np.int)
+        X_train = test_data.iloc[:,-1]
+        X_train = X_train.astype(np.float)
+        y_train = test_data.iloc[:,-1]
+        y_train = y_train.astype(np.int)
+        #print("From Pandas")
+    except:
+        train_data = np.genfromtxt(train_file)
+        test_data = np.genfromtxt(test_file)
+        X_test = test_data[:, :-1]
+        X_train = train_data[:, :-1]
+        y_test = test_data[:, -1]
+        y_train = train_data[:, -1]
+        X_test = X_test.astype(np.float)
+        y_test = y_test.astype(np.int)
+        X_train = X_train.astype(np.float)
+        y_train = y_train.astype(np.int)
+
+
+```
+
+now that a big chunk of code, lets break it down. 
+
+Since we are keeping pandas as optional, its nice to check if the user has already installed pandas. it provides us with fabulous dataframes which are easy to navigate thorugh. But its not required. If you look closely, we are also seperating four variables, X_train, X_test, y_trai, y_test. As you might have guessed, X_train contains all the attributes except the last column ,which is our "class" column or the targt column, from the train file and same with the test file.
+Also we know that class numbers are only integers, so we convert them to np.int format and the attributes are float, so comverting them respectively as well. Note we can do this in the same step. But I wanted to be as exlpicit as possible.
+
+y_train and y_test contains list of all the class numbers for that index example in the train or test file. This is usally the first step, sperating the target column from train and test file.
+
+
+
+The next step that we will do is calculate all the means and std deviation so that we can find the gaussains. 
+
+So we will do : 
+
+```python
+    class_means = []
+    class_std = []
+    #print(X_train[0][1])
+    indexes = []
+    y_train = np.asarray(y_train)
+    for i in range(1,11):
+        x = np.where(y_train == i)
+        #print(x)
+        x = np.asarray(x)
+        temp = []
+        #print(x[0])
+        for j in range(0, x.shape[1]):
+            temp.append(X_train[x[0][j],:])
+        #print(temp)
+        temp = np.asarray(temp)
+        for j in range(0,8):
+            temp2 = temp[:,j]
+            temp2 = np.asarray(temp2)
+            mean = temp2.mean()
+            #std  = temp2.std()
+            std = stdev(temp2)
+
+            """
+            We don't want our standard deviation to be 0
+            It can mess up out calculation
+
+            """
+            if std<=0.01:
+                std = 0.01
+            class_means.append(mean)
+            class_std.append(std)
+            #print("mean %.2f std %.2f" %(mean, std))
+```
+
+So lets break this chunk down. The first thing we need is a list to store all the mean and stdevs. Note that since we need to calculate the mean and stddev for all attributes of all classes, so lets say we have 10 classes and 8 attributes. So in total we need to find 80 mean and stdevs.
+
+We need to gather all the indexes where lets say class number is 1 so that we can find its mean and stdevs. We do that by x =np.where(y_train==i) inside the loop where i goes from 1 to 10, like our class numbers. We find the attrbutes and then store them in their respective arrays. If the stdev is less than 0.01, we reolace it with 0.01 since we dont want to mess up with our gaussian in whichwe divide it by sigma.
+
+
+After that lets define our main function. Its always a good practice in python to have this. Also we will be taking in the location of the train ffile and test file from the commannd line itself. So lets read that as well: 
+
+[ ] To be completed
+
+```python
+if __name__ == "__main__":
+    naive_bayes(sys.argv[1],sys.argv[2])
+```
+Here feew things are happing, sys.argv[1] and [2] will take the inputs and you will see that we have already deined a naive bayes function.
+
 
 **IMPORTANT - Please note that this is just my imterpretation of Naive Bayes as I understand it. The content might differ from source to source. However, I have correctly implemented the code as is, atleast according to my class curriculum. I appreciate your attention on this**
