@@ -12,8 +12,13 @@ Machine Learning Algorithms for my [CSE 4309 - Fundamentals of Machine Learning]
 * [Running the program](#running-the-program)
   * [About Dataset](#about-dataset)
   * [Naive Bayes](#naive-bayes)
-    * [How does Naive Bayes work ? ](#how-does-naive-bayes-work)
-    * [How to run the program](#how-to-run-the-program)
+  * [Linear Regression](#linear-regression)
+  * Neural Network
+  * Decision Trees
+  * K-nearest Neightbor
+  * Clustering
+  * Reinforcement Learning
+ 
 
 ## Setting up the environment
 
@@ -91,15 +96,7 @@ The above abstract of dataset is taken from my [course website](http://vlm1.uta.
 You can finnd the dataset there as well. I have some illustrative examples if the above text is not clear [here](https://github.com/nisargushah/Machine-Learning-from-scratch/blob/master/dataset/READme.md)
 
 
-### Naive Bayes
- ...to be updated
-
-#### How does Naive Bayes theorem work ? 
- ... to be updated
-
-
-#### How to run the program
-
+#### Naive Bayes
 We can run the code using : 
 ```console
 foo@bar:~$ python3 naive_bayes.py ../dataset/train.txt ../dataset/test.txt
