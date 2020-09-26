@@ -104,3 +104,8 @@ foo@bar:~$ python3 naive_bayes.py ../dataset/train.txt ../dataset/test.txt
 or
 ```console
 foo@bar:~$ python naive_bayes.py ../dataset/train.txt ../dataset/test.txt
+```
+
+Click [here](https://github.com/nisargushah/Machine-Learning-from-scratch/tree/master/Naive%20bayes%20classifier) for more details on how the algorithm works and how it is realted to the code.
+
+### Linear Regression
