@@ -9,7 +9,7 @@ Machine Learning Algorithms for my [CSE 4309 - Fundamentals of Machine Learning]
   * [Setting up Anaconda](#setting-up-anaconda)
 * [Cloning the repository](#cloning-the-repository)
 * [Installing Dependencies](#installing-dependencies)
-* [Running the program](#running-the-program)
+* [Runing the program](#running-the-program)
   * [About Dataset](#about-dataset)
   * [Naive Bayes](#naive-bayes)
     * [How does Naive Bayes work ? ](#how-does-naive-bayes-work)
@@ -68,7 +68,7 @@ After getting the message of successfully istallation we will install pandas.
 (myenv) foo@bar:~$ pip install pandas==1.0.5
 ```
 
-## Runninng the Program
+## Runinng the Program
 
 After we have successfully installed the dependecies the next step is to start running the programs!!
 
