@@ -16,7 +16,7 @@ This document will guide you through how the naive bayes works and how it is imp
  
  # Theory behind Naive bayes
  
- In this part I will try to explain how naive bayes work and why do we use it. If you want to jump right back at the code, [click here](#code-explaination)
+ In this part I will try to explain how naive bayes work and why do we use it. If you want to jump right back to the code, [click here](#code-explaination)
  
  ## What is a classification problem?
  
