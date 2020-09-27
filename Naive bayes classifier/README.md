@@ -1,10 +1,10 @@
 # Naive Bayes 
 
-This document will guide you through how the naive bayes works and how it is implemented in the code. Please use the Table of content if you want to skip a part
+This document will guide you through how the naive bayes works and how it is implemented in the code. Please use the Table of contents if you want to skip a part
 
 
 
-# Table of Content
+# Table of Contents
 
 * [Theory behing Naive Bayes](#theory-behind-naive-bayes)
   * [What is a Classification problem ?](#what-is-classification-problem)
