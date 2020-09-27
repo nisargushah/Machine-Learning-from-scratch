@@ -4,7 +4,7 @@ This document will guide you through how the naive bayes work and how it is impl
 
 
 
-#Table of Content
+# Table of Content
 
 * [Theory behing Naive Bayes](#theory-behind-naive-bayes)
   * [What is a Classification problem ?](#what-is-classification-problem)
