@@ -1,6 +1,6 @@
 # Naive Bayes 
 
-This document will guide you through how the naive bayes work and how it is implemented in the code. Please use the Table of content if you want to skip a part
+This document will guide you through how the naive bayes works and how it is implemented in the code. Please use the Table of content if you want to skip a part
 
 
 
