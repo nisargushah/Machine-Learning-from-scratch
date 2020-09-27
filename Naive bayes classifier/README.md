@@ -6,7 +6,7 @@ This document will guide you through how the naive bayes works and how it is imp
 
 # Table of Contents
 
-* [Theory behing Naive Bayes](#theory-behind-naive-bayes)
+* [Theory behind Naive Bayes](#theory-behind-naive-bayes)
   * [What is a Classification problem ?](#what-is-classification-problem)
   * [Bayes Classifer](#bayes-classifier)
   * [The Naive in Naive Bayes Classifier](#the-naive-in-naive-bayes-classifier)
