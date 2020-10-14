@@ -19,6 +19,27 @@ def one_hot_encoder(data):
         return vector
 
 
+def initial_weight(units):
+    parameters = {}
+    L = len(units)
+    for l in range(1, L):
+        parameters['W' + str(l)] = np.random.uniform(-0.5,0.5,size=(units[l],units[l-1]))
+        parameters['b' + str(l)] = np.zeros((units[l], 1))
+        assert(parameters['W' + str(l)].shape == (layer_dims[l], layer_dims[l - 1]))
+        assert(parameters['b' + str(l)].shape == (layer_dims[l], 1))
+    return parameters
+
+def sigmoid(x):
+    return (1 / (1+np.exp(-x)))
+
+def feed_forward(A_prev, W, b):
+    Z = np.dot(W, A_prev) + b
+    assert(Z.shape == (W.shape[0], A_prev.shape[1]))
+    cache = (A_prev, W, b)
+    return Z, cache, sigmoid(Z)
+
+
+
 
 def neural_network(train_file, test_file, layers, units_per_layer, rounds):
 
@@ -45,6 +66,9 @@ def neural_network(train_file, test_file, layers, units_per_layer, rounds):
     units.append(int(numOfClasses))
     print(units)
     #print(X_test.shape)
+
+
+
 
 if __name__ == '__main__':
     neural_network(sys.argv[1], sys.argv[2], int(sys.argv[3]), int(sys.argv[4]), int(sys.argv[5]))
