@@ -22,7 +22,7 @@ def sigmoid_derivative(x):
     return x*(1-x)
 
 def compute_delta(cache,target,layer_no,delta_next, parameters,output_layer = False):
-    if output_layer:
+    if output_layer == True:
         delta = (cache - target.reshape(target.shape[0],1))*sigmoid_derivative(cache)
         #print(sigmoid(cache).shape)
     else:
@@ -31,18 +31,23 @@ def compute_delta(cache,target,layer_no,delta_next, parameters,output_layer = Fa
     return delta
 
 def updateParameter(parameters,delta,learning_rate,A_prev, layer_no):
+    grads = {}
     delta = np.asarray(delta)
     #print(parameters['W'+str(layer_no)].shape,delta.shape,A_prev.shape )
     #print()
-    parameters['W'+str(layer_no)] -= learning_rate*(delta*A_prev)
-    parameters['b'+str(layer_no)] -= learning_rate*delta
-    return parameters
+    #grads['W'+str(layer_no)] = parameters['W'+str(layer_no)]  - learning_rate*(delta*A_prev)
+    #print("hello")
+    print(parameters['W'+str(layer_no)]  - learning_rate*(delta*A_prev))
+    grads['b'+str(layer_no)] = parameters['b'+str(layer_no)] - learning_rate*delta
+    return grads
 
 def initial_weight(units):
     parameters = {}
     L = len(units)
+    print("L = ", L)
     for l in range(1,L):
         parameters['W' + str(l)] = np.random.uniform(-0.5,0.5,size=(units[l],units[l-1]))
+        #print(parameters['W1'])
         parameters['b' + str(l)] = np.zeros((units[l], 1))
         assert(parameters['W' + str(l)].shape == (units[l], units[l - 1]))
         assert(parameters['b' + str(l)].shape == (units[l], 1))
@@ -92,16 +97,18 @@ def neural_network(train_file, test_file, layers, units_per_layer, rounds):
     units = []
 
     #print(units)
-    units = [units_per_layer for i in range(1,layers+1)]
+    units = [units_per_layer for i in range(1,layers-1)]
 
     units.insert(0,X_train.shape[1])
     numOfClasses = np.max(y_train) - np.min(y_test) +1
     units.append(int(numOfClasses))
     #print(units)
     parameters = initial_weight(units)
+    print(len(units)-1)
+
     delta_next = 0
     #print(X_test.shape)
-    for k in range(rounds):
+    for k in range(2):
         cache= []
         delta = []
         loss = 0
@@ -109,6 +116,7 @@ def neural_network(train_file, test_file, layers, units_per_layer, rounds):
         Z_master = []
         delta_list = []
         delta_list.append(0)
+        print(parameters['W1'][0])
         for j in range(len(X_train)):
             caches_per_layer = []
             A = X_train[j]
@@ -127,27 +135,25 @@ def neural_network(train_file, test_file, layers, units_per_layer, rounds):
 
         #print(caches_per_layer[-1][0].shape)
         #print(len(Z_master[-1][-1]))
+        delta_dict = {}
         for j in range(len(X_train)):
             learning_rate = 0.98
             for i in reversed(range(1,len(units))):
                 if i == len(units)-1:
                     delta_layer = compute_delta(sigmoid(Z_master[j][i-1]),vector_train[j],i,delta_next, parameters,output_layer = True)
-                    #delta_list.append(delta_layer)
-                    delta_next = delta_layer
+                    delta_dict['delta'+ str(i)] = delta_layer
                     #print( Z_list[i+j-2])
-                    parameters = updateParameter(parameters,delta_layer, learning_rate,sigmoid(Z_master[j][i-1]),i)
+                    #parameters = updateParameter(parameters,delta_layer, learning_rate,sigmoid(Z_master[j][i-1]),i)
                 else:
                     delta_layer = compute_delta(sigmoid(Z_master[j][i-1]),vector_train[j],i,delta_next, parameters,output_layer = False)
                     #delta_list.insert(i,delta_layer)
-                    parameters = updateParameter(parameters,delta_layer, learning_rate,sigmoid(Z_master[j][i-1]),i)
-                    #print(i+j-1)
-                    delta_next = delta_layer
-                    #print(Z_list)
-                #delta_next = delta_layer
+                    delta_dict['delta'+ str(i)] = delta_layer
+                    #parameters =  updateParameter(parameters,delta_layer, learning_rate,sigmoid(Z_master[j][i-1]),i)
+
         learning_rate *= 0.98
-        print("round = ", end='')
-        print(k,loss)
-        print(parameters['W1'][0])
+        """print("round = ", end='')
+        print(k,loss)"""
+    #print(parameters['W1'])
 
 
 
