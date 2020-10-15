@@ -23,10 +23,10 @@ def sigmoid_derivative(x):
 
 def compute_delta(cache,target,layer_no,delta_next, parameters,output_layer = False):
     if output_layer:
-        delta = (sigmoid(cache) - target.reshape(target.shape[0],1))*sigmoid_derivative(cache)
+        delta = (cache - target.reshape(target.shape[0],1))*sigmoid_derivative(cache)
         #print(sigmoid(cache).shape)
     else:
-        delta = np.sum(delta_next*parameters['W'+str(layer_no)])*sigmoid_derivative(cache)
+        delta = np.sum(delta_next*parameters['W'+str(layer_no+1)])*sigmoid_derivative(cache)
         #print(delta.shape)
     return delta
 
@@ -99,7 +99,7 @@ def neural_network(train_file, test_file, layers, units_per_layer, rounds):
     units.append(int(numOfClasses))
     #print(units)
     parameters = initial_weight(units)
-
+    delta_next = 0
     #print(X_test.shape)
     for k in range(rounds):
         cache= []
@@ -107,6 +107,8 @@ def neural_network(train_file, test_file, layers, units_per_layer, rounds):
         loss = 0
         A_list = []
         Z_master = []
+        delta_list = []
+        delta_list.append(0)
         for j in range(len(X_train)):
             caches_per_layer = []
             A = X_train[j]
@@ -122,7 +124,7 @@ def neural_network(train_file, test_file, layers, units_per_layer, rounds):
                 #print(A.shape, Z.shape)
             Z_master.append(Z_list)
             loss += compute_loss(A,vector_train[j])
-        delta_next = 0
+
         #print(caches_per_layer[-1][0].shape)
         #print(len(Z_master[-1][-1]))
         for j in range(len(X_train)):
@@ -130,12 +132,16 @@ def neural_network(train_file, test_file, layers, units_per_layer, rounds):
             for i in reversed(range(1,len(units))):
                 if i == len(units)-1:
                     delta_layer = compute_delta(sigmoid(Z_master[j][i-1]),vector_train[j],i,delta_next, parameters,output_layer = True)
+                    #delta_list.append(delta_layer)
+                    delta_next = delta_layer
                     #print( Z_list[i+j-2])
                     parameters = updateParameter(parameters,delta_layer, learning_rate,sigmoid(Z_master[j][i-1]),i)
                 else:
                     delta_layer = compute_delta(sigmoid(Z_master[j][i-1]),vector_train[j],i,delta_next, parameters,output_layer = False)
+                    #delta_list.insert(i,delta_layer)
                     parameters = updateParameter(parameters,delta_layer, learning_rate,sigmoid(Z_master[j][i-1]),i)
                     #print(i+j-1)
+                    delta_next = delta_layer
                     #print(Z_list)
                 #delta_next = delta_layer
         learning_rate *= 0.98
