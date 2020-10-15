@@ -117,6 +117,7 @@ def neural_network(train_file, test_file, layers, units_per_layer, rounds):
         delta_list = []
         delta_list.append(0)
         print(parameters['W1'][0])
+        delta_dict = {}
         for j in range(len(X_train)):
             caches_per_layer = []
             A = X_train[j]
@@ -132,28 +133,19 @@ def neural_network(train_file, test_file, layers, units_per_layer, rounds):
                 #print(A.shape, Z.shape)
             Z_master.append(Z_list)
             loss += compute_loss(A,vector_train[j])
-
-        #print(caches_per_layer[-1][0].shape)
-        #print(len(Z_master[-1][-1]))
-        delta_dict = {}
-        for j in range(len(X_train)):
             learning_rate = 0.98
             for i in reversed(range(1,len(units))):
                 if i == len(units)-1:
                     delta_layer = compute_delta(sigmoid(Z_master[j][i-1]),vector_train[j],i,delta_next, parameters,output_layer = True)
                     delta_dict['delta'+ str(i)] = delta_layer
-                    #print( Z_list[i+j-2])
-                    #parameters = updateParameter(parameters,delta_layer, learning_rate,sigmoid(Z_master[j][i-1]),i)
                 else:
                     delta_layer = compute_delta(sigmoid(Z_master[j][i-1]),vector_train[j],i,delta_next, parameters,output_layer = False)
-                    #delta_list.insert(i,delta_layer)
                     delta_dict['delta'+ str(i)] = delta_layer
-                    #parameters =  updateParameter(parameters,delta_layer, learning_rate,sigmoid(Z_master[j][i-1]),i)
 
         learning_rate *= 0.98
         """print("round = ", end='')
         print(k,loss)"""
-    #print(parameters['W1'])
+        print(parameters['W1'][0])
 
 
 
