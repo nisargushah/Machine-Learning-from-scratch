@@ -18,6 +18,25 @@ def one_hot_encoder(data):
         vector[np.arange(data.size),data-1] = 1
         return vector
 
+def sigmoid_derivative(x):
+    return sigmoid(x)*(1-sigmoid(x))
+
+def compute_delta(cache,target,layer_no,delta_next, parameters,output_layer = False):
+    if output_layer:
+        delta = (sigmoid(cache) - target.reshape(target.shape[0],1))*sigmoid_derivative(cache)
+        #print(sigmoid(cache).shape)
+    else:
+        delta = np.sum(delta_next*parameters['W'+str(layer_no)])*sigmoid_derivative(cache)
+        #print(delta.shape)
+    return delta
+
+def updateParameter(parameters,delta,learning_rate,A_prev, layer_no):
+    delta = np.asarray(delta)
+    print(parameters['W'+str(layer_no)].shape,delta.shape,A_prev.shape )
+    print()
+    parameters['W'+str(layer_no)] -= learning_rate*(delta*A_prev)
+    parameters['b'+str(layer_no)] -= learning_rate*delta
+    return parameters
 
 def initial_weight(units):
     parameters = {}
@@ -41,7 +60,7 @@ def feed_forward(A_prev, W, b):
     print(Z.shape, A_prev.reshape(x,1).shape[1])"""
     assert(Z.shape == (W.shape[0], A_prev.reshape(x,1).shape[1]))
     cache = (A_prev, W, b)
-    return (Z, cache), sigmoid(Z)
+    return Z ,cache, sigmoid(Z)
 
 def compute_loss(computed, original):
     loss = 0
@@ -68,7 +87,7 @@ def neural_network(train_file, test_file, layers, units_per_layer, rounds):
     X_test = X_test/X_test.max()
     vector_train = one_hot_encoder(y_train.astype(np.int))
     vector_test = one_hot_encoder(y_test.astype(np.int))
-    print(vector_train[0].shape)
+    #print(vector_train[0].shape)
 
     units = []
 
@@ -83,25 +102,47 @@ def neural_network(train_file, test_file, layers, units_per_layer, rounds):
 
     #print(X_test.shape)
     cache= []
+    delta = []
     loss = 0
+    A_list = []
+
+    Z_master = []
     for j in range(len(X_train)):
         caches_per_layer = []
         A = X_train[j]
+        Z_list = []
         for i in range(1,len(units)):
             #print(i)
             A_prev = A
             #print(A_prev.shape, parameters['W' + str(i)].shape )
-            cache, A = feed_forward(A_prev,parameters['W' + str(i)],parameters['b' + str(i)])
+            Z,cache, A = feed_forward(A_prev,parameters['W' + str(i)],parameters['b' + str(i)])
             caches_per_layer.append(cache)
-            #print(j)
-        #cache.append(caches_per_layer)
+            Z_list.append(Z)
+            A_list.append(A)
+            #print(A.shape, Z.shape)
+        Z_master.append(Z_list)
 
-        print(A.shape, vector_train[j].shape)
+
         loss += compute_loss(A,vector_train[j])
-    #print(caches_per_layer)
+    delta_next = 0
+    #print(caches_per_layer[-1][0].shape)
+    print(len(Z_master[-1][-1]))
+    for j in range(len(X_train)):
+        learning_rate = 0.98
+        for i in reversed(range(1,len(units))):
+            if i == len(units)-1:
+                delta_layer = compute_delta(Z_master[j][i-1],vector_train[j],i,delta_next, parameters,output_layer = True)
+                #print( Z_list[i+j-2])
+                parameters = updateParameter(parameters,delta_layer, learning_rate,sigmoid(Z_list[i+j-1]),i)
+            else:
+                delta_layer = compute_delta(Z_master[j][i-1],vector_train[j],i,delta_next, parameters,output_layer = False)
+                parameters = updateParameter(parameters,delta, learning_rate,sigmoid(Z_list[i+j-1]),i)
+            #delta_next = delta_layer
+            learning_rate *= 0.98
+        #break
 
-    #print(X_train[0].shape)
-    #print(loss)
+
+
 
 
 
