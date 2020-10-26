@@ -20,7 +20,7 @@ def DTL(examples,classes, attr, default, option, threshold):
     """
     """
     #First lets check for base case
-
+    print(examples.shape)
     if len(examples) == 0:
          return default
     elif len(np.unique(classes)) == 1:
@@ -28,11 +28,13 @@ def DTL(examples,classes, attr, default, option, threshold):
     else:
         best_attribute, best_threshold = choose_attr(examples, attr, option, classes)
         target_attr = examples[:,  best_attribute]
-        left = [target_attr < threshold]
-        right = [target_attr >= threshold]
-
-        left_DLT = DLT(left, classes, attr,distribution(classes),option, threshold)
-        right_DLT = DLT(right, classes, attr,distribution(classes),option, threshold)
+        left = examples[examples[:,best_attribute] < best_threshold]
+        right = examples[examples[:,best_attribute] >= best_threshold]
+        left = np.asarray(left)
+        print(left.shape)
+        right = np.asarray(right)
+        left_DLT = DTL(left, classes, attr,distribution(classes),option, threshold)
+        right_DLT = DTL(right, classes, attr,distribution(classes),option, threshold)
 
         tree ={
                 "left": left_DLT,
@@ -44,16 +46,19 @@ def choose_attr(examples, attr, option, classes):
 
     if option == 'optimized':
         max_gain = best_attribute = best_threshold = -1
-        for attr_ in range(attr):
-            attr_value = np.array(examples[:,attr_])
+        #print(examples.shape)
+        for i in range(attr):
+            attr_value = np.array(examples)[:,i]
+            #print(attr_value.shape)
             L = np.min(attr_value)
             M = np.max(attr_value)
+            #print(i)
             for K in range(1,51):
                 threshold = L + K*(M-L)/51
-                gain = information_gain(examples,classes, attr_, threshold)
-                print(gain)
+                gain = information_gain(examples,classes,i, threshold)
+                #print(gain)
                 if gain > max_gain:
-                    best_attribute = attr_
+                    best_attribute = i
                     best_threshold = threshold
         return best_attribute, best_threshold
 
