@@ -2,19 +2,13 @@ import sys
 import numpy as np
 from collections import Counter
 from statistics import stdev
+from scipy.spatial.distance import cityblock
 
 def normalise(data, test_data):
-    data = np.asarray(data)
-    #test_data = np.asarray(test_data, dtype=np.float32)
-
-    stats = [[np.mean(data[:,i]), np.std(data[:,i])] for i in range(0,data.shape[1]-1)]
-    #print(stats)
-    for x in range(0, data.shape[0]):
-        for y in range(0,data.shape[1]-1):
-            data[x][y] = (data[x][y] - stats[y][0])/stats[y][1]
-    for x in range(0, test_data.shape[0]):
-        for y in range(0,test_data.shape[1]-1):
-            test_data[x][y] = (test_data[x][y] - stats[y][0])/stats[y][1]
+    max = np.max(data[:,:-1])
+    data[:,:-1] = data[:,:-1]/max
+    max = np.max(test_data[:,:-1])
+    test_data[:,:-1] = test_data[:,:-1]/max
     return data, test_data
 
 def nearest_neighbor(train_data, test_data, k):
@@ -23,7 +17,7 @@ def nearest_neighbor(train_data, test_data, k):
     for predict in test_data:
         distance = []
         for data in train_data:
-            temp_dist =np.sqrt(np.sum(np.square(np.array(data[:-1]) - np.array(predict[:-1]))))
+            temp_dist =cityblock(np.array(data[:-1]) , np.array(predict[:-1]))
             distance.append((temp_dist,data[-1]))
         votes = [i[1] for i in sorted(distance)[:k]]
         predicted_class = Counter(votes).most_common(1)[0][0]
