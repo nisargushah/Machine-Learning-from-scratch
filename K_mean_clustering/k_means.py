@@ -1,59 +1,68 @@
+import matplotlib.pyplot as plt
+from matplotlib import style
 import numpy as np
-import sys
-import warnings
-import random
-from statistics import mean
-
-class K_mean:
-
-    def __init__(self, data, k, initialization):
-        self.data = data
-        self.K = k
-        self.initialization = initialization
+from sklearn import preprocessing
+from sklearn.model_selection import cross_validate as cross_validation
+import pandas as pd
 
 
 
-    def run(self, data):
 
-        if self.K > len(data):
-            warnings.warn("K cannot be greater than equal to the total length of the data, please select a different value for k")
-            sys.exit(0)
+class K_Means:
+    def __init__(self, k=3, tol=0.001, max_iter=300):
+        self.k = k
+        self.tol = tol
+        self.max_iter = max_iter
 
-        ##Step 1 assigning random initialization.
-        self.centroid=[]
-        for j in range(self.K):
-            self.centroid.append(random.randint(min(data),max(data)))
+    def fit(self,data):
 
-        ##Step2 assigning the cluster number to all data points:
-        if initialization == "random":
-            self.cluster = []
-            for j in range(len(data)):
-                self.cluster.append(random.randint(1,self.K))
-        elif initialization =="round_robin":
-            self.cluster = []
-            j=0
-            count= 1
-            while j < len(data):
-                if count > self.K:
-                    count = 1
-                self.cluster.append(count)
-                count+=1
-                j+=1
+        self.centroids = {}
 
-        else:
-            warnings.warn("Please enter a valid value for initialization (random or round_robin) ")
-            sys.exit(0)
+        for i in range(self.k):
+            self.centroids[i] = data[i]
 
-        ##Step 3, find distance of each element from the cluster
-        print(self.cluster)
-        print(self.centroid)
+        for i in range(self.max_iter):
+            self.classifications = {}
 
-if __name__ == "__main__":
-    #s<data_file>, <K>, <initialization>
-    data = np.loadtxt(sys.argv[1])
-    #print(len(data))
-    k = sys.argv[2]
-    initialization = sys.argv[3]
+            for i in range(self.k):
+                self.classifications[i] = []
 
-    clf = K_mean(data, int(k) , initialization)
-    clf.run(data)
+            for featureset in df:
+                distances = [np.linalg.norm(featureset-self.centroids[centroid]) for centroid in self.centroids]
+                classification = distances.index(min(distances))
+                self.classifications[classification].append(featureset)
+
+            prev_centroids = dict(self.centroids)
+
+            for classification in self.classifications:
+                self.centroids[classification] = np.average(self.classifications[classification],axis=0)
+
+            optimized = True
+
+            for c in self.centroids:
+                original_centroid = prev_centroids[c]
+                current_centroid = self.centroids[c]
+                if np.sum((current_centroid-original_centroid)/original_centroid*100.0) > self.tol:
+                    print(np.sum((current_centroid-original_centroid)/original_centroid*100.0))
+                    optimized = False
+
+            if optimized:
+                print(self.classifications)
+                break
+
+    def predict(self,data):
+        distances = [np.linalg.norm(data-self.centroids[centroid]) for centroid in self.centroids]
+        classification = distances.index(min(distances))
+        return classification
+
+
+# https://pythonprogramming.net/static/downloads/machine-learning-data/titanic.xls
+df = np.loadtxt('set1a.txt')
+#df.convert_objects(convert_numeric=True)
+
+
+print(df)
+#X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.5)
+y = [1,2,3,1,2,3,1,2]
+clf = K_Means()
+clf.fit(df)
