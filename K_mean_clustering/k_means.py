@@ -1,9 +1,7 @@
-import matplotlib.pyplot as plt
-from matplotlib import style
 import numpy as np
-from sklearn import preprocessing
-from sklearn.model_selection import cross_validate as cross_validation
 import pandas as pd
+import sys
+import random
 
 
 
@@ -19,8 +17,14 @@ class K_Means:
         self.centroids = {}
 
         for i in range(self.k):
-            self.centroids[i] = data[i]
-
+            if sys.argv[2] == 'round_robin':
+                self.centroids[i] = sum(data[0::i+1])/len(data[0::i+1])
+                print("--------")
+                print(self.centroids[i])
+            elif sys.argv[2] == 'random':
+                print("--------")
+                self.centroids[i] = random.randint(int(np.amin(data)), int(np.amax(data)))
+                print(self.centroids[i])
         for i in range(self.max_iter):
             self.classifications = {}
 
@@ -47,22 +51,32 @@ class K_Means:
                     optimized = False
 
             if optimized:
-                print(self.classifications)
+                #print(self.classifications)
+                final = [1]*int(np.amax(data)+2)
+                for x, y in self.classifications.items():
+                    #final[y] = x
+                    for value in y:
+                        #print("Hey")
+                        #print(value)
+                        final[int(value[0])] = x +1
+                    print(x, y)
+                for val in data:
+                    #print("Hello")
+                    #print(val)
+                    if(len(val)) == 2:
+                        print('(%10.4f, %10.4f) --> cluster %d\n'% (val[0], val[1], final[int(val[0])]))
+                    else:
+                        print('%10.4f --> cluster %d\n'%( val, final[int(val)]))
                 break
 
-    def predict(self,data):
-        distances = [np.linalg.norm(data-self.centroids[centroid]) for centroid in self.centroids]
-        classification = distances.index(min(distances))
-        return classification
 
-
-# https://pythonprogramming.net/static/downloads/machine-learning-data/titanic.xls
 df = np.loadtxt('set1a.txt')
+print(df[0,1])
 #df.convert_objects(convert_numeric=True)
 
 
 print(df)
 #X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.5)
-y = [1,2,3,1,2,3,1,2]
+#y = [1,2,3,1,2,3,1,2]
 clf = K_Means()
 clf.fit(df)
