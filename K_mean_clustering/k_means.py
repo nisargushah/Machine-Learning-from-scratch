@@ -3,8 +3,6 @@ import sys
 import random
 from scipy.spatial import distance
 
-
-
 def K_Means(data, k ,option, dims):
     ##step 1 - read file
     if dims == 2:
@@ -17,6 +15,10 @@ def K_Means(data, k ,option, dims):
         for i in range(k):
             if option == 'round_robin':
                 centroids.append( (sum(oneC[i::k])/len(oneC[i::k]),sum(twoC[i::k])/len(twoC[i::k])))
+            else:
+                q = list(oneC)
+                w = list(twoC)
+                centroids.append((random.random(), random.random()))
         clusters = [1]*len(data)
         while True:
             cluster_copy = clusters.copy()
@@ -67,11 +69,6 @@ def K_Means(data, k ,option, dims):
         #print(centroids)
         for h in range(len(data)):
             print('%10.4f --> cluster %d'%( data[h], clusters[h]))
-
-
-
-
-
 file = sys.argv[1]
 data = np.loadtxt(file)
 data = np.asarray(data)
