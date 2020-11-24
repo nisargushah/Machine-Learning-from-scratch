@@ -1,86 +1,79 @@
 import numpy as np
+import pandas as pd
 import sys
 import random
-from scipy.spatial import distance
 
+class K_Means:
+    def __init__(self, k=3, tol=0.001, max_iter=300):
+        self.k = k
+        self.tol = tol
+        self.max_iter = max_iter
 
+    def fit(self,data):
 
-def K_Means(data, k ,option, dims):
-    ##step 1 - read file
-    if dims == 2:
-        k = int(k)
-        ##Initliaze the centroidss
-        oneC = data[:,0]
-        twoC = data[:,1]
-        #print(twoC)
-        centroids = []
-        for i in range(k):
-            if option == 'round_robin':
-                centroids.append( (sum(oneC[i::k])/len(oneC[i::k]),sum(twoC[i::k])/len(twoC[i::k])))
-        clusters = [1]*len(data)
-        while True:
-            cluster_copy = clusters.copy()
-            for j in range(len(data)):
-                #print(_data)
-                dist = [distance.euclidean(i,data[j]) for i in centroids ]
-                clusters[j] = dist.index(min(dist))+1
+        self.centroids = {}
 
-            for a in range(1,k+1):
-                indices = [i for i, x in enumerate(clusters) if x == a]
-                res_list = [data[i] for i in indices]
-                oneC = [res_list[i][0] for i in range(len(res_list))]
-                twoC = [res_list[i][1] for i in range(len(res_list))]
-                len1 = len(oneC)
-                len2 = len(twoC)
-                if len1 == 0:
-                    len1 = 0.01
-                if len2 == 0:
-                    len2 = 0.01
-                centroids[a-1] = (sum(oneC)/len1, sum(twoC)/len2)
+        for i in range(self.k):
+            if sys.argv[2] == 'round_robin':
+                self.centroids[i] = sum(data[0::i+1])/len(data[0::i+1])
+                print("--------")
+                print(self.centroids[i])
+            elif sys.argv[2] == 'random':
+                print("--------")
+                self.centroids[i] = random.randint(int(np.amin(data)), int(np.amax(data)))
+                print(self.centroids[i])
+        for i in range(self.max_iter):
+            self.classifications = {}
 
-            if clusters == cluster_copy:
+            for i in range(self.k):
+                self.classifications[i] = []
+
+            for featureset in df:
+                distances = [np.linalg.norm(featureset-self.centroids[centroid]) for centroid in self.centroids]
+                classification = distances.index(min(distances))
+                self.classifications[classification].append(featureset)
+
+            prev_centroids = dict(self.centroids)
+
+            for classification in self.classifications:
+                self.centroids[classification] = np.average(self.classifications[classification],axis=0)
+
+            optimized = True
+
+            for c in self.centroids:
+                original_centroid = prev_centroids[c]
+                current_centroid = self.centroids[c]
+                if np.sum((current_centroid-original_centroid)/original_centroid*100.0) > self.tol:
+                    print(np.sum((current_centroid-original_centroid)/original_centroid*100.0))
+                    optimized = False
+
+            if optimized:
+                #print(self.classifications)
+                final = [1]*int(np.amax(data)+2)
+                for x, y in self.classifications.items():
+                    #final[y] = x
+                    for value in y:
+                        #print("Hey")
+                        #print(value)
+                        final[int(value[0])] = x +1
+                    print(x, y)
+                for val in data:
+                    #print("Hello")
+                    #print(val)
+                    if(len(val)) == 2:
+                        print('(%10.4f, %10.4f) --> cluster %d\n'% (val[0], val[1], final[int(val[0])]))
+                    else:
+                        print('%10.4f --> cluster %d\n'%( val, final[int(val)]))
                 break
-        #print(centroids)
-        for h in range(len(data)):
-            print('(%10.4f, %10.4f) --> cluster %d'%( data[h][0], data[h][1], clusters[h]))
-
-    else:
-        k = int(k)
-        centroids = []
-        for i in range(k):
-            if option == 'round_robin':
-                centroids.append(sum(data[0::i+1])/len(data[0::i+1]))
-        clusters = [1]*len(data)
-        while True:
-            cluster_copy = clusters.copy()
-            for j in range(len(data)):
-                #print(_data)
-                dist = [distance.euclidean(i,data[j]) for i in centroids ]
-                clusters[j] = dist.index(min(dist))+1
-            for a in range(1,k+1):
-                indices = [i for i, x in enumerate(clusters) if x == a]
-                res_list = [data[i] for i in indices]
-                centroids[a-1] = (sum(res_list)/len(res_list))
-
-            if clusters == cluster_copy:
-                break
-        #print(centroids)
-        for h in range(len(data)):
-            print('%10.4f --> cluster %d'%( data[h], clusters[h]))
 
 
+df = np.loadtxt('set1a.txt')
+print(df[0,1])
+#df.convert_objects(convert_numeric=True)
 
 
-
-file = sys.argv[1]
-data = np.loadtxt(file)
-data = np.asarray(data)
-#print(data.shape[1])
-if len(data.shape) == 2:
-    dims = 2
-else:
-    dims = 1
-k = sys.argv[2]
-option = sys.argv[3]
-
-K_Means(data,k,option, dims)
+print(df)
+#X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.5)
+#y = [1,2,3,1,2,3,1,2]
+clf = K_Means()
+clf.fit(df)
