@@ -32,7 +32,7 @@ We will be usinng Python3 for this project. Here's how to set up an environment.
 After you have installed the Anaconda package, go to your terminal and navigate to where you 
 write up the following commands..
 ```console
-foo@bar:~$ conda create -n myenv python==3.8.3
+foo@bar:~$ conda env create --file environment.yml
 ```
 After coping this command the terminal will ask you if you want to continue, press y and then enter
 Windows users might have to go to their Anaconda bash terminal which they can go to using the search bar. Just type Anaconda bash and it should appear
@@ -62,16 +62,6 @@ To do this first we will activate the enviornmennt and then install them
 foo:~$ conda activate myenv
 ```
 
-After typing this you should see that (myenv) appears before your every bash line (Please note that it won't work if you have customized your terminal with powerline or any other tool )
-
-```console
-(myenv) foo@bar:~$ pip install numpy==1.18.5
-```
-After getting the message of successfully istallation we will install pandas.
-
-```console
-(myenv) foo@bar:~$ pip install pandas==1.0.5
-```
 
 ## Running the program
 
