@@ -173,7 +173,7 @@ After that lets define our main function. Its always a good practice in python t
 if __name__ == "__main__":
     naive_bayes(sys.argv[1],sys.argv[2])
 ```
-Here feew things are happing, sys.argv[1] and [2] will take the inputs and you will see that we have already deined a naive bayes function.
+Here few things are happing, sys.argv[1] and [2] will take the inputs and you will see that we have already deined a naive bayes function.
 
 
 **IMPORTANT - Please note that this is just my imterpretation of Naive Bayes as I understand it. The content might differ from source to source. However, I have correctly implemented the code as is, atleast according to my class curriculum. I appreciate your attention on this**
