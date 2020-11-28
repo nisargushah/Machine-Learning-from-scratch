@@ -16,7 +16,7 @@ Machine Learning Algorithms for my [CSE 4309 - Fundamentals of Machine Learning]
   * Neural Network
   * [Decision Trees](#decision-trees)
   * [K-nearest Neighbor](#k-nearest-neighbor)
-  * Clustering
+  * [Clustering](#clustering)
   * Reinforcement Learning
  
 
