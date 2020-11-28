@@ -24,6 +24,19 @@ Machine Learning Algorithms for my [CSE 4309 - Fundamentals of Machine Learning]
 
 We will be usinng Python3 for this project. Here's how to set up an environment. 
 
+
+## Cloning the repository
+
+This repository has MIT license. 
+
+Go to your desired directory where you want to clone this repo in the terminal and then 
+
+```console
+foo@bar:~$ git clone https://github.com/nisargushah/Machine-Learning-from-scratch.git
+```
+
+Now we have succesfully cloned the repository. The next step is to activate the environment
+
 ### Setting up Anaconda
 
 [Anaconda](https://www.anaconda.com/) is an amazing package source for python and I highly recommend downloading it from [here](https://www.anaconda.com/products/individual)
@@ -39,28 +52,22 @@ Windows users might have to go to their Anaconda bash terminal which they can go
 Let me know if it doesnt work !
 
 
-## Cloning the repository
-
-This repository has MIT license. 
-
-Go to your desired directory where you want to clone this repo in the terminal and then 
-
-```console
-foo@bar:~$ git clone https://github.com/nisargushah/Machine-Learning-from-scratch.git
-```
-
-Now we have succesfully cloned the repository. The next step is to activate the environment
 
 ## Installing Dependencies
-
-We are trying to implement a raw version of this algorithms but we will use numpy and pandas libraries here to make our life a little easier while still maintianing 
-the raw implementation.
 
 To do this first we will activate the enviornmennt and then install them 
 
 ```console
 foo:~$ conda activate myenv
 ```
+
+We are trying to implement a raw version of this algorithms but we will use numpy and pandas libraries here to make our life a little easier while still maintianing the raw implementation. Both of this libraries will be installed when we set up the enviornment. To see the version of numpy and any other libraries that are installed, simply do: 
+
+```console
+(MLscratch) foo:~$ pip freeze
+```
+
+This should print out all the installed libraries
 
 
 ## Running the program
